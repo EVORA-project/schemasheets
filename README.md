@@ -31,7 +31,7 @@ To generate a LinkML schema from a Google Sheet with schemasheets:
 ```sh
 docker run --rm -v $(pwd):/workdir -u $(id -u):$(id -g) evoratools/schemasheets:0.3.1  \
 sheets2linkml --gsheet-id {YOUR_GSHEET_ID} \
-\ --name {YOUR_SCHEMA_NAME} \
+--name {YOUR_SCHEMA_NAME} \
 {SHEET1_NAME} {SHEET2_NAME} .... \
 -o {YOUR_RELATIVE_PATH_IN_WORKDIR/TO_YOUR_SCHEMA_FILE_OUTPUT.yaml}
 ```
@@ -42,7 +42,7 @@ To generate an OWL file from a YAML schema:
 docker run --rm -v $(pwd):/workdir -u $(id -u):$(id -g) evoratools/schemasheets:0.3.1 \
 linkml generate owl \
 {YOUR_PATH_IN_WORKDIR/TO_YOUR_SCHEMA_FILE.yaml} \
-> {YOUR_PATH_IN_WORKDIR/TO_YOUR_OWL_FILE.owl.ttl}
+> {YOUR_PATH_IN_WORKDIR/TO_YOUR_OWL_FILE_OUTPUT.owl.ttl}
 ```
 
 
