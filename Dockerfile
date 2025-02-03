@@ -22,7 +22,7 @@ RUN apk upgrade --no-cache && apk add --no-cache py-pip \
     && mkdir -m 777 /.local /.data /.config \
     # Conditional Fix for GitHub issue with equals_string_in ahead of PR integration if EVORA_TAG is true
     # solution imported from EVORA fork of LinkML: https://github.com/linkml/linkml/pull/2519
-    && if [ "$EVORA_NEEDS" = "true" ]; then \
+    && if [ "$EVORA_TAG" = "true" ]; then \
        wget -O /usr/lib/python3.12/site-packages/linkml/generators/owlgen.py https://raw.githubusercontent.com/EVORA-project/linkml/refs/heads/main/linkml/generators/owlgen.py; \
        fi \
     && adduser -SD $APPNAME 
