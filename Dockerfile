@@ -15,11 +15,16 @@ embedding LinkML (allowing to author schemas in YAML, working with and validatin
  schemas to other frameworks) and the related schemasheets framework allowing to generate schema \
  specification from spreadsheets (Google Sheets, Excel)"
 
+ARG EVORA_TAG=false
+
 RUN apk upgrade --no-cache && apk add --no-cache py-pip \
     && pip install --break-system-packages schemasheets \
     && mkdir -m 777 /.local /.data /.config \
-    # Rapid fix for GitHub issue with equals_string_in set to be always litteral values: https://github.com/linkml/linkml/issues/1855
-    && sed -i '/equals_string_in:/a\ \ \ \ \ \ \ \ \ \ \ \ is_literal = True' /usr/lib/python3.12/site-packages/linkml/generators/owlgen.py \
+    # Conditional Fix for GitHub issue with equals_string_in ahead of PR integration if EVORA_TAG is true
+    # solution imported from EVORA fork of LinkML: https://github.com/linkml/linkml/pull/2519
+    && if [ "$EVORA_NEEDS" = "true" ]; then \
+       wget -O /usr/lib/python3.12/site-packages/linkml/generators/owlgen.py https://raw.githubusercontent.com/EVORA-project/linkml/refs/heads/main/linkml/generators/owlgen.py; \
+       fi \
     && adduser -SD $APPNAME 
 
 USER $APPNAME
