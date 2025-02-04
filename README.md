@@ -2,7 +2,7 @@
 
 # SchemaSheets Container (evoratools/schemasheets)
 
-A lightweight container based on Alpine Linux, embedding the LinkML and SchemaSheets frameworks for seamless schema authoring, data validation, and conversion.
+A lightweight container based on Alpine Linux, embedding the LinkML and SchemaSheets frameworks for schema authoring, data validation, and conversion in containerized environments.
 
 ---
 
@@ -28,7 +28,7 @@ This container image is automatically built and pushed as a multi-architecture i
 
 The container includes LinkML and SchemaSheets official pip packages, enabling users to:
 - Author schemas in YAML  
-- Work with and validate data formats (JSON, RDF, TSV, OWL)  
+- Work with and validate data formats (JSON, RDF, TSV, OWL, ...)  
 - Generate schema specifications from spreadsheets (Google Sheets, Excel)  
 
 ### Basic Container Usage
@@ -41,7 +41,7 @@ To check the installed LinkML version in the container simply use the linkml com
 docker run --rm evoratools/schemasheets:latest linkml --version
 ```
 
-#### To explore available commands with a basic structured run for being ready to go thurther:  
+#### To explore available commands and prepare for more advanced usage 
 
 Running the container without arguments displays help information, including available commands:
 
@@ -51,9 +51,10 @@ docker run --rm -u $(id -u):$(id -g) -v $(pwd):/workdir evoratools/schemasheets
 ```
 
 -  `--rm`: Automatically removes the container when it stops.
-- `-u`: Ensures container processes match your user ID for proper file permissions as the evoratools/schemasheets container images follows best practices by running with a non-root user.
+- `-u`: Ensures container processes match your user ID for proper file permissions.
 - `-v`: Mounts your working directory at `/workdir` inside the container.
 
+The container follows best practices by running with a non-root user.
 
 ---
 
@@ -89,6 +90,7 @@ Explore available tags here: [DockerHub Tags](https://hub.docker.com/r/evoratool
 
 ## [![GitHub license](https://img.shields.io/github/license/EVORA-project/schemasheets)](https://github.com/EVORA-project/schemasheets/blob/master/LICENSE) License
 This project is licensed under the [MIT License](https://github.com/EVORA-project/schemasheets/blob/main/LICENSE).
+
 You are free to use, modify, and distribute this project as permitted under the terms of the license.
 
 ---
