@@ -38,6 +38,7 @@ jobs:
         run: |
           docker buildx build --platform linux/amd64,linux/arm64 \
             -t evoratools/schemasheets:${{ env.VERSION }} \
+            -t evoratools/schemasheets:latest \
             --push .
           docker buildx build --platform linux/amd64,linux/arm64 \
             -t evoratools/schemasheets:EVORA_TAG${{ env.VERSION }} \
