@@ -25,26 +25,29 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build and Push Multiarch Docker Image
+
+      - name: Extract schemasheet version
+        id: extract_version
         run: |
-         # Build temporary image to extract version
           docker buildx create --use
           docker buildx inspect --bootstrap
-          docker buildx build --platform linux/amd64,linux/arm64 \
-            -t evoratools/schemasheets:temp \
-            --build-arg EVORA_TAG=true \
-            --load .
-
-          # Extract schemasheet version
-          VERSION=$(docker run --rm -v $(pwd):/workdir -u $(id -u):$(id -g) evoratools/schemasheets:temp pip --no-cache-dir show schemasheets |$
+          docker build -t evoratools/schemasheets:temp .
+          VERSION=$(docker run --rm -v $(pwd):/workdir -u $(id -u):$(id -g) evoratools/schemasheets:temp pip --no-cache-dir show schemasheets | grep "Version:" | grep -Eo "[\.0-9]+")
           echo "VERSION=$VERSION" >> $GITHUB_ENV
- 
-          # Retagging temp tag to be EVORA version
-          docker tag evoratools/schemasheets:temp evoratools/schemasheets:EVORA_$VERSION
-          docker push evoratools/schemasheets:EVORA_$VERSION
 
-          # Build and push official schemasheets+linkML container image
+      # For details on embeded improvements see Dockerfile https://github.com/EVORA-project/schemasheets/blob/main/Dockerfile
+      # and https://github.com/EVORA-project/linkml 
+      - name: Build and Push Multiarch schemasheets EVORA image that embeds special fixes ahead of PR integration
+        run: |
           docker buildx build --platform linux/amd64,linux/arm64 \
-            -t evoratools/schemasheets:$VERSION \
+            -t evoratools/schemasheets:EVORA_${{ env.VERSION }} \
+            --build-arg EVORA_TAG=true \
+            --push .
+
+      - name: Build and Push Multiarch Docker Image with last official schemasheets+LinkML versions
+        run: |
+          docker buildx build --platform linux/amd64,linux/arm64 \
+            -t evoratools/schemasheets:${{ env.VERSION }} \
             -t evoratools/schemasheets:latest \
             --push .
+
