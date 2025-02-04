@@ -25,22 +25,21 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Extract schemasheet version
-        id: extract_version
+      - name: Build and Push Multiarch Docker Image
         run: |
           docker buildx create --use
           docker buildx inspect --bootstrap
-          docker build -t evoratools/schemasheets:temp .
-          TAG=$(docker run --rm -v $(pwd):/workdir -u $(id -u):$(id -g) evoratools/schemasheets:temp pip --no-cache-dir show schemasheets | grep "Version:" | grep -Eo "[\.0-9]+")
-          echo "VERSION=$TAG" >> $GITHUB_ENV
-
-      - name: Build and Push Multiarch Docker Image
-        run: |
           docker buildx build --platform linux/amd64,linux/arm64 \
-            -t evoratools/schemasheets:${{ env.VERSION }} \
-            -t evoratools/schemasheets:latest \
-            --push .
-          docker buildx build --platform linux/amd64,linux/arm64 \
-            -t evoratools/schemasheets:EVORA_TAG${{ env.VERSION }} \
+            -t evoratools/schemasheets:temp \
             --build-arg EVORA_TAG=true \
+            .
+
+          VERSION=$(docker run --rm -v $(pwd):/workdir -u $(id -u):$(id -g) evoratools/schemasheets:temp pip --no-cache-dir show schemasheets |$
+          
+          docker tag evoratools/schemasheets:temp evoratools/schemasheets:EVORA_${{ VERSION }}
+          docker push evoratools/schemasheets:EVORA_${{ VERSION }}
+
+          docker buildx build --platform linux/amd64,linux/arm64 \
+            -t evoratools/schemasheets:${{ VERSION }} \
+            -t evoratools/schemasheets:latest \
             --push .
