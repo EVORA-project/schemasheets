@@ -89,8 +89,13 @@ Explore available tags here: [DockerHub Tags](https://hub.docker.com/r/evoratool
 ---
 
 ## [![GitHub license](https://img.shields.io/github/license/EVORA-project/schemasheets)](https://github.com/EVORA-project/schemasheets/blob/master/LICENSE) License
-This project is licensed under the [MIT License](https://github.com/EVORA-project/schemasheets/blob/main/LICENSE).
+This container image and the content of this repository are licensed under the [MIT License](https://github.com/EVORA-project/schemasheets/blob/main/LICENSE).
 
 You are free to use, modify, and distribute this project as permitted under the terms of the license.
+
+For embedded programs like LinkML and SchemaSheets, please refer to their respective repositories for licensing details:
+
+- [LinkML](https://github.com/linkml/linkml)
+- [SchemaSheets](https://github.com/linkml/schemasheets)
 
 ---
