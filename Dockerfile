@@ -7,8 +7,8 @@ LABEL org.opencontainers.image.source="$GITHUBREPO/$APPNAME.git"
 LABEL org.opencontainers.image.url="$GITHUBREPO/$APPNAME"
 LABEL org.opencontainers.image.base.name="docker.io/library/alpine"
 LABEL org.opencontainers.image.title="$DOCKERREPO/$APPNAME"
-LABEL org.opencontainers.image.version="linkml, version 1.8.5"
-LABEL org.opencontainers.image.version="schemasheets, version 0.3.1"
+LABEL org.opencontainers.image.version="linkml, version >= 1.9.1"
+LABEL org.opencontainers.image.version="schemasheets, version >= 0.4.0"
 LABEL org.opencontainers.image.description="Minimal container image base on Alpine linux \
 embedding LinkML (allowing to author schemas in YAML, working with and validating data in \
  a variety of formats JSON, RDF, TSV, OWL, with generators for compiling LinkML \
@@ -20,11 +20,6 @@ ARG EVORA_TAG=false
 RUN apk upgrade --no-cache && apk add --no-cache py-pip \
     && pip install --break-system-packages schemasheets \
     && mkdir -m 777 /.local /.data /.config \
-    # Conditional Fix for GitHub issue with equals_string_in ahead of PR integration if EVORA_TAG is true
-    # solution imported from EVORA fork of LinkML: https://github.com/linkml/linkml/pull/2519
-    && if [ "$EVORA_TAG" = "true" ]; then \
-       wget -O /usr/lib/python3.12/site-packages/linkml/generators/owlgen.py https://raw.githubusercontent.com/EVORA-project/linkml/refs/heads/main/linkml/generators/owlgen.py; \
-       fi \
     && adduser -SD $APPNAME 
 
 USER $APPNAME
