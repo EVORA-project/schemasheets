@@ -38,14 +38,6 @@ jobs:
           VERSION=$(docker run --rm -v $(pwd):/workdir -u $(id -u):$(id -g) evoratools/schemasheets:temp pip --no-cache-dir show schemasheets | grep "Version:" | grep -Eo "[\.0-9]+")
           echo "VERSION=$VERSION" >> $GITHUB_ENV
 
-      # For details on embeded improvements see Dockerfile https://github.com/EVORA-project/schemasheets/blob/main/Dockerfile
-      # and https://github.com/EVORA-project/linkml 
-      - name: Build and Push Multiarch schemasheets EVORA image that embeds special fixes ahead of PR integration
-        run: |
-          docker buildx build --platform linux/amd64,linux/arm64 \
-            -t evoratools/schemasheets:EVORA_${{ env.VERSION }} \
-            --build-arg EVORA_TAG=true \
-            --push .
 
       - name: Build and Push Multiarch Docker Image with last official schemasheets+LinkML versions
         run: |
